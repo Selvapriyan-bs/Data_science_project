@@ -1,0 +1,103 @@
+=================================================================
+SUPPLY CHAIN LOGISTICS — ML PIPELINE
+=================================================================
+
+>> Loading dataset …
+  Rows: 32,065  |  Columns: 26
+  risk_classification classes: ['High Risk', 'Low Risk', 'Moderate Risk']
+  delivery_time_deviation range: [-2.00, 10.00]
+
+  Features used (23): ['vehicle_gps_latitude', 'vehicle_gps_longitude', 'fuel_consumption_rate', 'eta_variation_hours', 'traffic_congestion_level', 'warehouse_inventory_level', 'loading_unloading_time', 'handling_equipment_availability', 'order_fulfillment_status', 'weather_condition_severity', 'port_congestion_level', 'shipping_costs', 'supplier_reliability_score', 'lead_time_days', 'historical_demand', 'iot_temperature', 'cargo_condition_status', 'route_risk_level', 'customs_clearance_time', 'driver_behavior_score', 'fatigue_monitoring_score', 'disruption_likelihood_score', 'delay_probability']
+
+  Train: 25,652  |  Test: 6,413
+
+=================================================================
+CLASSIFICATION  →  risk_classification
+=================================================================
+
+  [Logistic Regression]
+    CV F1 (macro): 0.9940 ± 0.0033
+    Test Accuracy: 0.9988   Test F1 (macro): 0.9972   Time: 3.0s
+
+  [Random Forest]
+    CV F1 (macro): 0.9999 ± 0.0001
+    Test Accuracy: 1.0000   Test F1 (macro): 1.0000   Time: 8.4s
+
+  [Gradient Boosting]
+    CV F1 (macro): 0.9999 ± 0.0001
+    Test Accuracy: 1.0000   Test F1 (macro): 1.0000   Time: 101.0s
+
+  [XGBoost]
+    CV F1 (macro): 0.9966 ± 0.0013
+    Test Accuracy: 0.9983   Test F1 (macro): 0.9969   Time: 5.9s
+
+  [LightGBM]
+    CV F1 (macro): 0.9943 ± 0.0018
+    Test Accuracy: 0.9983   Test F1 (macro): 0.9964   Time: 5.1s
+
+  [OK] Best Classifier: Random Forest  (F1=1.0000)
+
+  Classification Report — Random Forest:
+               precision    recall  f1-score   support
+
+    High Risk       1.00      1.00      1.00      4789
+     Low Risk       1.00      1.00      1.00       622
+Moderate Risk       1.00      1.00      1.00      1002
+
+     accuracy                           1.00      6413
+    macro avg       1.00      1.00      1.00      6413
+ weighted avg       1.00      1.00      1.00      6413
+
+  Saved: plots/confusion_matrix.png
+  Saved: plots/cls_feature_importance.png
+  Saved: models\best_classifier.pkl
+
+=================================================================
+REGRESSION  →  delivery_time_deviation
+=================================================================
+
+  [Ridge Regression]
+    CV R²: -0.0017 ± 0.0007
+    Test  MAE=3.6938  RMSE=4.1591  R²=-0.0014   Time: 0.2s
+
+  [Random Forest]
+    CV R²: -0.0126 ± 0.0026
+    Test  MAE=3.7255  RMSE=4.1916  R²=-0.0170   Time: 126.6s
+
+  [Gradient Boosting]
+    CV R²: -0.0103 ± 0.0026
+    Test  MAE=3.6986  RMSE=4.1713  R²=-0.0072   Time: 85.4s
+
+  [XGBoost]
+    CV R²: -0.1786 ± 0.0113
+    Test  MAE=3.8700  RMSE=4.4948  R²=-0.1695   Time: 3.5s
+
+  [LightGBM]
+    CV R²: -0.0333 ± 0.0048
+    Test  MAE=3.7130  RMSE=4.2079  R²=-0.0250   Time: 2.5s
+
+  [OK] Best Regressor: Ridge Regression  (R²=-0.0014)
+  Saved: plots/regression_actual_vs_pred.png
+  Saved: models\best_regressor.pkl
+
+=================================================================
+SUMMARY
+=================================================================
+
+  CLASSIFICATION COMPARISON:
+  Model                        CV F1   Test Acc   Test F1
+  ------------------------- -------- ---------- ---------
+  Random Forest               0.9999     1.0000    1.0000 ◄ BEST
+  Gradient Boosting           0.9999     1.0000    1.0000
+  Logistic Regression         0.9940     0.9988    0.9972
+  XGBoost                     0.9966     0.9983    0.9969
+  LightGBM                    0.9943     0.9983    0.9964
+
+  REGRESSION COMPARISON:
+  Model                        CV R²      MAE     RMSE       R²
+  ------------------------- -------- -------- -------- --------
+  Ridge Regression           -0.0017   3.6938   4.1591  -0.0014 ◄ BEST
+  Gradient Boosting          -0.0103   3.6986   4.1713  -0.0072
+  Random Forest              -0.0126   3.7255   4.1916  -0.0170
+  LightGBM                   -0.0333   3.7130   4.2079  -0.0250
+  XGBoost                    -0.1786   3.8700   4.4948  -0.1695
